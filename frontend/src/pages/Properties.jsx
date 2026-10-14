@@ -1,27 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import { getAuthenticatedUser, getProfileName } from "../services/auth";
 import PropertyModal from "../components/PropertyModal";
-
-function getCurrentUserFromToken() {
-  try {
-    const token = localStorage.getItem("token");
-
-    if (!token) return null;
-
-    const payload = JSON.parse(atob(token.split(".")[1]));
-
-    return {
-      email: payload.sub || payload.email,
-      role:
-        payload.role ||
-        payload.roles?.[0]?.replace("ROLE_", "") ||
-        payload.authorities?.[0]?.authority?.replace("ROLE_", ""),
-    };
-  } catch {
-    return null;
-  }
-}
 
 function formatCurrency(value) {
   return new Intl.NumberFormat("en-IN", {
@@ -52,7 +33,7 @@ export default function Properties() {
 
   const [deleteLoading, setDeleteLoading] = useState(null);
 
-  const currentUser = getCurrentUserFromToken();
+  const currentUser = getAuthenticatedUser();
 
   const loadProperties = useCallback(async () => {
     try {
@@ -254,12 +235,12 @@ export default function Properties() {
 
           <div className="properties-user">
             <div className="properties-user-avatar">
-              {currentUser?.email?.charAt(0)?.toUpperCase() || "R"}
+              {(currentUser?.name?.charAt(0) || currentUser?.email?.charAt(0) || "R").toUpperCase()}
             </div>
 
             <div>
               <span className="properties-user-label">SIGNED IN AS</span>
-              <strong>{currentUser?.email || "Landlord"}</strong>
+              <strong>{getProfileName(currentUser, "Landlord")}</strong>
             </div>
           </div>
         </div>

@@ -2,29 +2,13 @@ import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import api from "../services/api";
+import { getAuthenticatedUser, getProfileName } from "../services/auth";
 import "../index.css";
-
-function getUserFromToken() {
-  const token = localStorage.getItem("token");
-
-  if (!token) return null;
-
-  try {
-    const payload = JSON.parse(atob(token.split(".")[1]));
-
-    return {
-      email: payload.sub,
-      role: payload.role,
-    };
-  } catch {
-    return null;
-  }
-}
 
 export default function Dashboard() {
   const navigate = useNavigate();
 
-  const user = getUserFromToken();
+  const user = getAuthenticatedUser();
   const [properties, setProperties] = useState([]);
   const [agreements, setAgreements] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -56,7 +40,7 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    const currentUser = getUserFromToken();
+    const currentUser = getAuthenticatedUser();
 
     if (!currentUser) {
       navigate("/login");
@@ -91,9 +75,9 @@ export default function Dashboard() {
     0
   );
 
-  const firstName =
-    user?.email?.split("@")[0]?.charAt(0).toUpperCase() +
-    user?.email?.split("@")[0]?.slice(1);
+  const profileName = getProfileName(user);
+  const greetingName = user?.name || "there";
+  const avatarInitial = user?.name?.charAt(0) || user?.email?.charAt(0) || "R";
 
   return (
     <div className="luxury-app">
@@ -197,12 +181,12 @@ export default function Dashboard() {
             <div className="profile">
 
               <div className="profile-avatar">
-                {firstName?.charAt(0) || "R"}
+                {avatarInitial.toUpperCase()}
               </div>
 
               <div className="profile-info">
                 <strong>
-                  {firstName || "User"}
+                  {profileName}
                 </strong>
 
                 <span>
@@ -231,7 +215,7 @@ export default function Dashboard() {
               Good morning,
               <br />
               <em>
-                {firstName || "there"}.
+                {greetingName}.
               </em>
             </h1>
 

@@ -2,26 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import api from "../services/api";
+import { getAuthenticatedUser, getProfileName } from "../services/auth";
 import AgreementModal from "../components/AgreementModal";
 
 import "./Agreements.css";
-
-function getUserFromToken() {
-  const token = localStorage.getItem("token");
-
-  if (!token) return null;
-
-  try {
-    const payload = JSON.parse(atob(token.split(".")[1]));
-
-    return {
-      email: payload.sub,
-      role: payload.role,
-    };
-  } catch {
-    return null;
-  }
-}
 
 function formatCurrency(value) {
   return `₹${Number(value || 0).toLocaleString("en-IN")}`;
@@ -57,7 +41,7 @@ function getDaysUntil(date) {
 export default function Agreements() {
   const navigate = useNavigate();
 
-  const user = getUserFromToken();
+  const user = getAuthenticatedUser();
   const [agreements, setAgreements] = useState([]);
   const [properties, setProperties] = useState([]);
   const [tenants, setTenants] = useState([]);
@@ -74,7 +58,7 @@ export default function Agreements() {
   const [viewingAgreement, setViewingAgreement] = useState(null);
 
   useEffect(() => {
-    const currentUser = getUserFromToken();
+    const currentUser = getAuthenticatedUser();
 
     if (!currentUser) {
       navigate("/login");
@@ -321,12 +305,12 @@ export default function Agreements() {
           <div className="agreements-profile">
 
             <div className="agreements-avatar">
-              {user?.email?.charAt(0)?.toUpperCase() || "R"}
+              {(user?.name?.charAt(0) || user?.email?.charAt(0) || "R").toUpperCase()}
             </div>
 
             <div>
               <strong>
-                {user?.email?.split("@")[0] || "User"}
+                {getProfileName(user)}
               </strong>
 
               <span>{user?.role}</span>

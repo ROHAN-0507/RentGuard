@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import { saveAuthSession } from "../services/auth";
 import "../styles/Login.css";
 
 function Login() {
@@ -31,13 +32,13 @@ function Login() {
     try {
       const response = await api.post("/auth/login", form);
 
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", JSON.stringify(response.data));
+      saveAuthSession(response.data);
 
       navigate("/dashboard");
     } catch (error) {
       setError(
         error.response?.data?.message ||
+          error.response?.data?.detail ||
           "Invalid email or password."
       );
     } finally {

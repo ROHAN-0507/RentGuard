@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import { saveAuthSession } from "../services/auth";
 import "../styles/Register.css";
 
 function Register() {
@@ -33,13 +34,13 @@ function Register() {
     try {
       const response = await api.post("/auth/register", form);
 
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", JSON.stringify(response.data));
+      saveAuthSession(response.data);
 
       navigate("/dashboard");
     } catch (error) {
       setError(
         error.response?.data?.message ||
+          error.response?.data?.detail ||
           "Registration failed. Please try again."
       );
     } finally {

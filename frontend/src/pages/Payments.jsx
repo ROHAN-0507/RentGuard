@@ -2,24 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import api from "../services/api";
+import { getAuthenticatedUser, getProfileName } from "../services/auth";
 import "./payments.css";
-
-function getUserFromToken() {
-  const token = localStorage.getItem("token");
-
-  if (!token) return null;
-
-  try {
-    const payload = JSON.parse(atob(token.split(".")[1]));
-
-    return {
-      email: payload.sub,
-      role: payload.role,
-    };
-  } catch {
-    return null;
-  }
-}
 
 function formatCurrency(value) {
   return new Intl.NumberFormat("en-IN", {
@@ -42,7 +26,7 @@ function formatDate(date) {
 export default function Payments() {
   const navigate = useNavigate();
 
-  const user = getUserFromToken();
+  const user = getAuthenticatedUser();
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState(null);
@@ -50,7 +34,7 @@ export default function Payments() {
   const [filter, setFilter] = useState("ALL");
 
   useEffect(() => {
-    const currentUser = getUserFromToken();
+    const currentUser = getAuthenticatedUser();
 
     if (!currentUser) {
       navigate("/login");
@@ -98,9 +82,8 @@ export default function Payments() {
     }
   };
 
-  const firstName =
-    user?.email?.split("@")[0]?.charAt(0).toUpperCase() +
-    user?.email?.split("@")[0]?.slice(1);
+  const profileName = getProfileName(user);
+  const avatarInitial = user?.name?.charAt(0) || user?.email?.charAt(0) || "R";
 
   const stats = useMemo(() => {
     const paid = payments.filter((p) => p.status === "PAID");
@@ -218,11 +201,11 @@ export default function Payments() {
           <div className="payment-profile-area">
             <div className="payment-profile">
               <div className="payment-avatar">
-                {firstName?.charAt(0) || "R"}
+                {avatarInitial.toUpperCase()}
               </div>
 
               <div>
-                <strong>{firstName || "User"}</strong>
+                <strong>{profileName}</strong>
                 <span>{user?.role}</span>
               </div>
             </div>
