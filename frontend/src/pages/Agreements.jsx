@@ -57,7 +57,7 @@ function getDaysUntil(date) {
 export default function Agreements() {
   const navigate = useNavigate();
 
-  const [user, setUser] = useState(null);
+  const user = getUserFromToken();
   const [agreements, setAgreements] = useState([]);
   const [properties, setProperties] = useState([]);
   const [tenants, setTenants] = useState([]);
@@ -81,11 +81,10 @@ export default function Agreements() {
       return;
     }
 
-    setUser(currentUser);
     loadData(currentUser.role);
   }, [navigate]);
 
-  const loadData = async (role) => {
+  async function loadData(role) {
     try {
       setLoading(true);
       setError("");
@@ -109,7 +108,7 @@ export default function Agreements() {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const activeAgreements = agreements.filter(
     (agreement) => agreement.status === "ACTIVE"
@@ -122,14 +121,6 @@ export default function Agreements() {
 
     return days !== null && days >= 0 && days <= 30;
   });
-
-  const expiredAgreements = agreements.filter(
-    (agreement) => agreement.status === "EXPIRED"
-  );
-
-  const terminatedAgreements = agreements.filter(
-    (agreement) => agreement.status === "TERMINATED"
-  );
 
   const activeMonthlyRent = activeAgreements.reduce(
     (sum, agreement) => sum + Number(agreement.monthlyRent || 0),
@@ -221,6 +212,7 @@ export default function Agreements() {
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     navigate("/login");
   };
 
@@ -289,30 +281,18 @@ export default function Agreements() {
               Agreements
             </button>
 
-            <button className="agreements-nav-item">
+            <button
+              className="agreements-nav-item"
+              onClick={() => navigate("/payments")}
+            >
               <span>04</span>
               Payments
-            </button>
-
-            <button className="agreements-nav-item">
-              <span>05</span>
-              Maintenance
-            </button>
-
-            <button className="agreements-nav-item">
-              <span>06</span>
-              Notifications
             </button>
 
           </nav>
         </div>
 
         <div className="agreements-sidebar-bottom">
-
-          <button className="agreements-settings">
-            <span>⚙</span>
-            Settings
-          </button>
 
           <button
             className="agreements-logout"
@@ -713,11 +693,13 @@ export default function Agreements() {
       {/* CREATE / EDIT MODAL */}
       {showModal && (
         <AgreementModal
+          isOpen={showModal}
+          mode={editingAgreement ? "edit" : "add"}
           agreement={editingAgreement}
           properties={properties}
           tenants={tenants}
           onClose={closeModal}
-          onSaved={handleSaved}
+          onSuccess={handleSaved}
         />
       )}
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import api from "../services/api";
@@ -24,11 +24,36 @@ function getUserFromToken() {
 export default function Dashboard() {
   const navigate = useNavigate();
 
-  const [user, setUser] = useState(null);
+  const user = getUserFromToken();
   const [properties, setProperties] = useState([]);
   const [agreements, setAgreements] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const loadDashboard = useCallback(async (role) => {
+    try {
+      setLoading(true);
+      setError("");
+
+      if (role === "LANDLORD") {
+        const [propertyResponse, agreementResponse] = await Promise.all([
+          api.get("/properties/my"),
+          api.get("/agreements/my"),
+        ]);
+
+        setProperties(propertyResponse.data);
+        setAgreements(agreementResponse.data);
+      } else {
+        const agreementResponse = await api.get("/agreements/my");
+        setAgreements(agreementResponse.data);
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Unable to load your RentGuard data.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     const currentUser = getUserFromToken();
@@ -38,40 +63,12 @@ export default function Dashboard() {
       return;
     }
 
-    setUser(currentUser);
-    loadDashboard(currentUser.role);
-  }, [navigate]);
-
-  const loadDashboard = async (role) => {
-    try {
-      setLoading(true);
-      setError("");
-
-      if (role === "LANDLORD") {
-        const [propertyResponse, agreementResponse] =
-          await Promise.all([
-            api.get("/properties/my"),
-            api.get("/agreements/my"),
-          ]);
-
-        setProperties(propertyResponse.data);
-        setAgreements(agreementResponse.data);
-      } else {
-        const agreementResponse =
-          await api.get("/agreements/my");
-
-        setAgreements(agreementResponse.data);
-      }
-    } catch (err) {
-      console.error(err);
-      setError("Unable to load your RentGuard data.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    Promise.resolve().then(() => loadDashboard(currentUser.role));
+  }, [navigate, loadDashboard]);
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     navigate("/login");
   };
 
@@ -166,37 +163,11 @@ export default function Dashboard() {
               Payments
             </Link>
 
-            {/* MAINTENANCE */}
-            <Link
-              to="/maintenance"
-              className="luxury-nav-item"
-            >
-              <span>05</span>
-              Maintenance
-            </Link>
-
-            {/* NOTIFICATIONS */}
-            <Link
-              to="/notifications"
-              className="luxury-nav-item"
-            >
-              <span>06</span>
-              Notifications
-            </Link>
-
           </nav>
 
         </div>
 
         <div className="sidebar-bottom">
-
-          <button
-            className="settings-link"
-            type="button"
-          >
-            <span>⚙</span>
-            Settings
-          </button>
 
           <button
             className="logout-link"
@@ -222,14 +193,6 @@ export default function Dashboard() {
           </div>
 
           <div className="topbar-right">
-
-            <Link
-              to="/notifications"
-              className="notification-button"
-            >
-              ◌
-              <i />
-            </Link>
 
             <div className="profile">
 

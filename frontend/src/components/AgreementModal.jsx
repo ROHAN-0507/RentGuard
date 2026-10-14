@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import api from "../services/api";
 
 const emptyForm = {
@@ -33,33 +33,20 @@ export default function AgreementModal({
   onClose,
   onSuccess,
 }) {
-  const [form, setForm] = useState(emptyForm);
+  const [form, setForm] = useState(() => agreement ? {
+    propertyId: agreement.property?.id || "",
+    tenantId: agreement.tenant?.id || "",
+    monthlyRent: agreement.monthlyRent ?? "",
+    securityDeposit: agreement.securityDeposit ?? "",
+    startDate: formatDateForInput(agreement.startDate),
+    endDate: formatDateForInput(agreement.endDate),
+  } : emptyForm);
   const [errors, setErrors] = useState({});
   const [apiError, setApiError] = useState("");
   const [saving, setSaving] = useState(false);
 
   const isView = mode === "view";
   const isEdit = mode === "edit";
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    if (agreement) {
-      setForm({
-        propertyId: agreement.property?.id || "",
-        tenantId: agreement.tenant?.id || "",
-        monthlyRent: agreement.monthlyRent ?? "",
-        securityDeposit: agreement.securityDeposit ?? "",
-        startDate: formatDateForInput(agreement.startDate),
-        endDate: formatDateForInput(agreement.endDate),
-      });
-    } else {
-      setForm(emptyForm);
-    }
-
-    setErrors({});
-    setApiError("");
-  }, [isOpen, agreement]);
 
   if (!isOpen) return null;
 

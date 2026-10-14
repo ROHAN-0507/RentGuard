@@ -42,7 +42,7 @@ function formatDate(date) {
 export default function Payments() {
   const navigate = useNavigate();
 
-  const [user, setUser] = useState(null);
+  const user = getUserFromToken();
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState(null);
@@ -57,11 +57,10 @@ export default function Payments() {
       return;
     }
 
-    setUser(currentUser);
     loadPayments();
   }, [navigate]);
 
-  const loadPayments = async () => {
+  async function loadPayments() {
     try {
       setLoading(true);
       setError("");
@@ -75,10 +74,11 @@ export default function Payments() {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     navigate("/login");
   };
 
@@ -196,24 +196,10 @@ export default function Payments() {
               Payments
             </button>
 
-            <button className="payment-nav-item">
-              <span>05</span>
-              Maintenance
-            </button>
-
-            <button className="payment-nav-item">
-              <span>06</span>
-              Notifications
-            </button>
           </nav>
         </div>
 
         <div className="payment-sidebar-bottom">
-          <button className="payment-settings">
-            <span>⚙</span>
-            Settings
-          </button>
-
           <button className="payment-logout" onClick={logout}>
             Log out
             <span>↗</span>
@@ -230,11 +216,6 @@ export default function Payments() {
           </div>
 
           <div className="payment-profile-area">
-            <button className="payment-notification">
-              ◌
-              <i />
-            </button>
-
             <div className="payment-profile">
               <div className="payment-avatar">
                 {firstName?.charAt(0) || "R"}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import api from "../services/api";
 
 const emptyForm = {
@@ -18,34 +18,21 @@ export default function PropertyModal({
   onClose,
   onSuccess,
 }) {
-  const [form, setForm] = useState(emptyForm);
+  const [form, setForm] = useState(() => property ? {
+    title: property.title || "",
+    address: property.address || "",
+    city: property.city || "",
+    state: property.state || "",
+    pincode: property.pincode || "",
+    monthlyRent: property.monthlyRent ?? "",
+    description: property.description || "",
+  } : emptyForm);
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [apiError, setApiError] = useState("");
 
   const isView = mode === "view";
   const isEdit = mode === "edit";
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    if (property) {
-      setForm({
-        title: property.title || "",
-        address: property.address || "",
-        city: property.city || "",
-        state: property.state || "",
-        pincode: property.pincode || "",
-        monthlyRent: property.monthlyRent ?? "",
-        description: property.description || "",
-      });
-    } else {
-      setForm(emptyForm);
-    }
-
-    setErrors({});
-    setApiError("");
-  }, [isOpen, property]);
 
   if (!isOpen) return null;
 

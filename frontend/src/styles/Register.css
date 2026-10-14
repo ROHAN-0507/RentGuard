@@ -1,0 +1,605 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@400;500;600;700;800&display=swap");
+
+.register-page {
+  --register-black: #191916;
+  --register-cream: #f5f2ec;
+  --register-muted: #858178;
+  --register-line: #e3ddd2;
+  --register-gold: #ad9568;
+
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 0 7.5%;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 12% 55%, #ebe5d8 0%, transparent 42%),
+    var(--register-cream);
+  color: var(--register-black);
+  font-family: "Manrope", sans-serif;
+}
+
+.register-page *,
+.register-page *::before,
+.register-page *::after {
+  box-sizing: border-box;
+}
+
+.register-page button,
+.register-page input,
+.register-page select {
+  font: inherit;
+}
+
+.register-page button {
+  cursor: pointer;
+}
+
+.register-decoration {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  border: 1px solid rgba(173, 149, 104, 0.18);
+  border-radius: 50%;
+}
+
+.register-decoration-one {
+  width: 440px;
+  height: 440px;
+  top: 18%;
+  left: -290px;
+}
+
+.register-decoration-two {
+  width: 580px;
+  height: 580px;
+  top: 8%;
+  right: -390px;
+}
+
+.register-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 100px;
+  border-bottom: 1px solid rgba(190, 182, 168, 0.55);
+}
+
+.register-brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--register-black);
+  text-align: left;
+}
+
+.register-brand-mark {
+  display: grid;
+  width: 43px;
+  height: 43px;
+  place-items: center;
+  border: 1px solid #aaa08d;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 30px;
+}
+
+.register-brand-name {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 3px;
+}
+
+.register-brand-name small {
+  display: block;
+  margin-top: 5px;
+  color: var(--register-muted);
+  font-size: 7px;
+  font-weight: 600;
+  letter-spacing: 1.7px;
+}
+
+.register-header-note {
+  color: #8d887e;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+}
+
+.register-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 450px);
+  align-items: center;
+  gap: clamp(50px, 9vw, 140px);
+  width: 100%;
+  max-width: 1250px;
+  margin: auto;
+  padding: 55px 0;
+}
+
+.register-intro {
+  max-width: 600px;
+  animation: registerReveal 0.65s ease both;
+}
+
+.register-eyebrow,
+.register-card-label {
+  color: #95815e;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 2.2px;
+}
+
+.register-intro h1 {
+  margin: 27px 0 22px;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(50px, 5.4vw, 76px);
+  font-weight: 500;
+  line-height: 0.99;
+  letter-spacing: -1.8px;
+}
+
+.register-intro h1 em {
+  color: #8f7953;
+  font-weight: 400;
+}
+
+.register-intro > p {
+  max-width: 440px;
+  color: #77736a;
+  font-size: 13px;
+  line-height: 2;
+}
+
+.register-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin-top: 38px;
+}
+
+.register-benefit {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.register-benefit > span {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  place-items: center;
+  border: 1px solid #d6cbb8;
+  color: #9b8660;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.register-benefit strong {
+  display: block;
+  padding-top: 2px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.register-benefit p {
+  margin-top: 5px;
+  color: #89847a;
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+.register-intro-footer {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 45px;
+  color: #969083;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.register-footer-line {
+  width: 55px;
+  height: 1px;
+  background: #c9b99d;
+}
+
+.register-card {
+  width: 100%;
+  padding: 34px 36px 26px;
+  border: 1px solid #e6e0d6;
+  background: rgba(251, 249, 245, 0.95);
+  box-shadow: 0 25px 75px rgba(51, 43, 29, 0.075);
+  animation: registerReveal 0.65s 0.1s ease both;
+}
+
+.register-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.register-card-symbol {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid #e4ddd1;
+  color: #9d8967;
+  font-size: 17px;
+}
+
+.register-card h2 {
+  margin: 21px 0 8px;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 43px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+.register-card h2 > span {
+  color: var(--register-gold);
+}
+
+.register-card-description {
+  margin-bottom: 25px;
+  color: #89847b;
+  font-size: 10px;
+  line-height: 1.8;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+}
+
+.register-field label {
+  display: block;
+  margin-bottom: 8px;
+  color: #777168;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.register-input-wrap,
+.register-select-wrap {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  height: 47px;
+  padding: 0 13px;
+  border: 1px solid #ddd6ca;
+  background: #fdfbf8;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.register-input-wrap:focus-within,
+.register-select-wrap:focus-within {
+  border-color: #aa956e;
+  box-shadow: 0 0 0 3px rgba(173, 149, 104, 0.09);
+}
+
+.register-input-wrap > svg {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  color: #a09889;
+}
+
+.register-input-wrap input {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #25241f;
+  font-size: 10px;
+}
+
+.register-input-wrap input::placeholder {
+  color: #b0aaa0;
+}
+
+.register-password-toggle {
+  flex-shrink: 0;
+  padding: 6px 0 6px 5px;
+  border: 0;
+  background: transparent;
+  color: #8d7956;
+  font-size: 8px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.8px;
+}
+
+.register-select-wrap {
+  position: relative;
+}
+
+.register-select-wrap select {
+  width: 100%;
+  height: 100%;
+  appearance: none;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #37342c;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.register-select-wrap > span {
+  position: absolute;
+  right: 14px;
+  pointer-events: none;
+  color: #9b8969;
+  font-size: 17px;
+}
+
+.register-error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px;
+  border: 1px solid #e2c6be;
+  background: #f8ebe7;
+  color: #8b4f44;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.register-error > span {
+  display: grid;
+  width: 19px;
+  height: 19px;
+  flex-shrink: 0;
+  place-items: center;
+  border: 1px solid #cda69b;
+  border-radius: 50%;
+  font-weight: 800;
+}
+
+.register-submit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 51px;
+  margin-top: 3px;
+  padding: 0 18px;
+  border: 1px solid #1b1b17;
+  background: #1b1b17;
+  color: #faf7f0;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  transition: background 0.25s, transform 0.25s;
+}
+
+.register-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: #37352d;
+}
+
+.register-submit:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.register-submit-arrow {
+  color: #d4bc91;
+  font-size: 19px;
+  transition: transform 0.2s;
+}
+
+.register-submit:hover:not(:disabled) .register-submit-arrow {
+  transform: translateX(4px);
+}
+
+.register-card-divider {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: 24px 0 15px;
+  color: #a19a8f;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  white-space: nowrap;
+}
+
+.register-card-divider span:first-child,
+.register-card-divider span:last-child {
+  flex: 1;
+  height: 1px;
+  background: #e5dfd5;
+}
+
+.register-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  min-height: 41px;
+  border: 1px solid #ded7cb;
+  background: transparent;
+  color: #333129;
+  font-size: 10px;
+  font-weight: 700;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.register-login:hover {
+  border-color: #b7a27d;
+  background: #f3eee5;
+}
+
+.register-login span {
+  color: #9a835c;
+  font-size: 15px;
+}
+
+.register-secure-note {
+  margin-top: 23px;
+  color: #a19a8f;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.register-secure-note span {
+  margin-right: 6px;
+  color: #a18b62;
+}
+
+.register-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 65px;
+  border-top: 1px solid rgba(190, 182, 168, 0.55);
+  color: #969084;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1.3px;
+}
+
+@keyframes registerReveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 1500px) {
+  .register-page {
+    padding-right: max(7.5%, calc((100% - 1350px) / 2));
+    padding-left: max(7.5%, calc((100% - 1350px) / 2));
+  }
+}
+
+@media (max-width: 950px) {
+  .register-page {
+    padding: 0 5%;
+  }
+
+  .register-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 400px);
+    gap: 35px;
+  }
+
+  .register-intro h1 {
+    font-size: clamp(43px, 5vw, 60px);
+  }
+
+  .register-card {
+    padding: 30px 26px 24px;
+  }
+
+  .register-header-note {
+    font-size: 7px;
+    letter-spacing: 1px;
+  }
+}
+
+@media (max-width: 720px) {
+  .register-page {
+    padding: 0 22px;
+  }
+
+  .register-header {
+    min-height: 79px;
+  }
+
+  .register-header-note {
+    display: none;
+  }
+
+  .register-layout {
+    grid-template-columns: 1fr;
+    gap: 35px;
+    max-width: 440px;
+    padding: 40px 0 45px;
+  }
+
+  .register-intro h1 {
+    margin-top: 20px;
+    font-size: clamp(45px, 10vw, 61px);
+  }
+
+  .register-intro > p {
+    font-size: 12px;
+  }
+
+  .register-benefits {
+    gap: 18px;
+    margin-top: 26px;
+  }
+
+  .register-intro-footer {
+    display: none;
+  }
+
+  .register-card {
+    padding: 28px 24px 23px;
+  }
+
+  .register-bottom {
+    min-height: 60px;
+    font-size: 6px;
+    letter-spacing: 0.7px;
+  }
+}
+
+@media (max-width: 380px) {
+  .register-page {
+    padding: 0 15px;
+  }
+
+  .register-card {
+    padding: 25px 17px 21px;
+  }
+
+  .register-brand-name {
+    font-size: 11px;
+  }
+
+  .register-card h2 {
+    font-size: 37px;
+  }
+
+  .register-bottom {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 15px 0;
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .register-page *,
+  .register-page *::before,
+  .register-page *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import PropertyModal from "../components/PropertyModal";
@@ -54,16 +54,7 @@ export default function Properties() {
 
   const currentUser = getCurrentUserFromToken();
 
-  useEffect(() => {
-    if (!localStorage.getItem("token")) {
-      navigate("/login");
-      return;
-    }
-
-    loadProperties();
-  }, [navigate]);
-
-  async function loadProperties() {
+  const loadProperties = useCallback(async () => {
     try {
       setLoading(true);
       setError("");
@@ -91,7 +82,16 @@ export default function Properties() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [navigate]);
+
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
+      return;
+    }
+
+    Promise.resolve().then(loadProperties);
+  }, [navigate, loadProperties]);
 
   function openAddModal() {
     setSelectedProperty(null);
@@ -468,13 +468,13 @@ export default function Properties() {
         </section>
       )}
 
-      <PropertyModal
+      {modalOpen && <PropertyModal
         isOpen={modalOpen}
         mode={modalMode}
         property={selectedProperty}
         onClose={closeModal}
         onSuccess={handleModalSuccess}
-      />
+      />}
     </div>
   );
 }
